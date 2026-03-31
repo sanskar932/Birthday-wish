@@ -775,11 +775,18 @@
 
   <script>
     // 🔥 FIREBASE INIT
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-    };
+  
+const firebaseConfig = {
+  apiKey: "AIzaSyBR2G1xzT9c_CrOMQcZsOVk8SEVz8Mcm44",
+  authDomain: "birthday-829a2.firebaseapp.com",
+  projectId: "birthday-829a2",
+  storageBucket: "birthday-829a2.firebasestorage.app",
+  messagingSenderId: "630550768108",
+  appId: "1:630550768108:web:f1ab760541c56036abb8c9"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
