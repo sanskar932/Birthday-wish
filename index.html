@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For Someone Special 💛</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <style>
+    :root {
+      --bg1: #fff7f2;
+      --bg2: #fff1d6;
+ script>
+    // 🔥 FIREBASE INIT
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+    };     --bg3: #f7e8ff;
+      --card: rgba(255, 255, 255, 0.34);
+      --card-strong: rgba(255, 255, 255, 0.52);
+      --text: #4b3f52;
+      --muted: #78687f;
+      --accent: #f5a9c2;
+      --accent2: #d9b8ff;
+      --accent3: #ffe07a;
+      --success: #6aa86b;
+      --error: #c86a7a;
+      --shadow: 0 10px 30px rgba(89, 67, 104, 0.10);
+      --shadow-soft: 0 8px 18px rgba(89, 67, 104, 0.08);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --maxw: 520px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Poppins", system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.75), transparent 35%),
+        linear-gradient(180deg, var(--bg1), var(--bg2), var(--bg3));
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255, 208, 220, 0.25), transparent 20%),
+        radial-gradient(circle at 80% 20%, rgba(221, 208, 255, 0.22), transparent 20%),
+        radial-gradient(circle at 50% 90%, rgba(255, 224, 122, 0.18), transparent 22%);
+      z-index: 0;
+    }
+
+    #background-effects {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    #progress-container {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(92vw, 360px);
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      z-index: 50;
+    }
+
+    #progress-bar {
+      width: 20%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #f5a9c2, #ffd88b, #d9b8ff);
+      transition: width 450ms ease;
+    }
+
+    #app {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 64px 14px 24px;
+    }
+
+    .section {
+      width: 100%;
+      max-width: var(--maxw);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 88px);
+      animation: sectionOut 320ms ease both;
+    }
+
+    .section.active {
+      display: flex;
+      animation: sectionIn 520ms ease both;
+    }
+
+    .card {
+      width: 100%;
+      border-radius: var(--radius-xl);
+      padding: 22px 18px;
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .card strong {
+      font-weight: 600;
+    }
+
+    .title,
+    .line,
+    #wish-status,
+    #wish-step p,
+    #cake-message,
+    #cut-hint {
+      text-align: center;
+    }
+
+    .title {
+      font-size: clamp(1.25rem, 4.4vw, 1.65rem);
+      line-height: 1.45;
+      margin: 0 0 16px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .line {
+      margin: 0;
+      font-size: clamp(1.1rem, 3.7vw, 1.35rem);
+      line-height: 1.65;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .line.reveal {
+      animation: lineIn 700ms ease forwards;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      border: 1px solid rgba(123, 104, 138, 0.16);
+      background: rgba(255, 255, 255, 0.56);
+      color: var(--text);
+      border-radius: 18px;
+      padding: 15px 16px;
+      font-size: 16px;
+      outline: none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    input[type="text"]::placeholder {
+      color: rgba(75, 63, 82, 0.52);
+    }
+
+    input[type="text"]:focus {
+      border-color: rgba(245, 169, 194, 0.7);
+      box-shadow: 0 0 0 4px rgba(245, 169, 194, 0.15);
+      transform: translateY(-1px);
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 18px;
+      padding: 14px 16px;
+      margin-top: 14px;
+      font: inherit;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #4a3a4f;
+      background: linear-gradient(135deg, #ffe9ef, #fff4c9);
+      box-shadow: 0 8px 18px rgba(120, 96, 134, 0.12);
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease, opacity 160ms ease;
+      will-change: transform;
+    }
+
+    button:hover {
+      filter: brightness(1.02);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    button.secondary {
+      background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(230, 214, 255, 0.6));
+    }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .error,
+    .success {
+      min-height: 22px;
+      margin: 10px 0 0;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .error {
+      color: var(--error);
+    }
+
+    .success {
+      color: var(--success);
+    }
+
+    #unlock .card {
+      text-align: center;
+    }
+
+    #success-text {
+      font-weight: 500;
+    }
+
+    #welcome .card {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+    }
+
+    #welcome .card button {
+      margin-top: 18px;
+    }
+
+    .card-container {
+      width: 100%;
+      display: grid;
+      gap: 14px;
+    }
+
+    .interactive {
+      position: relative;
+      overflow: hidden;
+      min-height: 138px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      background: var(--card-strong);
+      border-radius: var(--radius-lg);
+      padding: 18px 16px;
+      transform: translateZ(0);
+    }
+
+    .interactive p {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+
+    .interactive .hidden-content {
+      margin-top: 10px;
+      font-size: 0.98rem;
+      line-height: 1.55;
+      color: var(--muted);
+      opacity: 0;
+      transform: translateY(8px);
+      max-width: 32ch;
+      transition: opacity 240ms ease, transform 240ms ease;
+    }
+
+    .interactive.revealed .hidden-content {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .interactive::after {
+      content: "";
+      position: absolute;
+      inset: auto -20% -35% -20%;
+      height: 110px;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.42), transparent 65%);
+      opacity: 0;
+      transform: scale(0.65);
+      transition: opacity 240ms ease, transform 240ms ease;
+    }
+
+    .interactive.tapfx::after {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .sub-step {
+      width: 100%;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    #birthday .card {
+      text-align: center;
+    }
+
+    #cake,
+    #cut-cake-area {
+      width: 100%;
+      min-height: 150px;
+      border-radius: 22px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.18));
+      border: 1px dashed rgba(120, 96, 134, 0.16);
+      display: grid;
+      place-items: center;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #cake::before {
+      content: "🎂";
+      font-size: 4rem;
+      filter: drop-shadow(0 8px 12px rgba(0,0,0,0.07));
+      animation: floatCake 2.6s ease-in-out infinite;
+    }
+
+    #cake.candles-out::before {
+      content: "🎂";
+    }
+
+    #cake.bounce {
+      animation: cakeBounce 520ms ease;
+    }
+
+    #wish-status,
+    #cake-message,
+    #cut-hint {
+      font-size: 0.96rem;
+      min-height: 22px;
+      color: var(--muted);
+    }
+
+    #letter .card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    #open-letter,
+    #restart-btn {
+      margin-top: 16px;
+    }
+
+    #letter-content {
+      margin-top: 18px;
+      padding: 6px 2px 0;
+      text-align: left;
+    }
+
+    .letter-line {
+      opacity: 0;
+      transform: translateY(12px);
+      margin: 0 0 12px;
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    .letter-line.show {
+      animation: lineIn 700ms ease forwards;
+    }
+
+    #skip-letter,
+    #final-ending {
+      margin-top: 16px;
+    }
+
+    #final-ending {
+      text-align: center;
+      padding-top: 8px;
+    }
+
+    #wax-seal {
+      width: 74px;
+      height: 74px;
+      margin: 12px auto 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ffd3dd, #f29cb5);
+      box-shadow: 0 12px 24px rgba(242, 156, 181, 0.22);
+      animation: sealPop 620ms ease;
+    }
+
+    .sparkle,
+    .heart,
+    .note {
+      position: absolute;
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+
+    .sparkle {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 0 12px rgba(255,255,255,0.8);
+    }
+
+    .heart,
+    .note {
+      font-size: 1.15rem;
+    }
+
+    .music-text {
+      margin-top: 8px;
+      text-align: center;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .glow {
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.4), 0 0 30px rgba(245,169,194,0.22), var(--shadow);
+    }
+
+    .zoom-in {
+      animation: zoomIn 520ms ease both;
+    }
+
+    .fade-out {
+      animation: fadeOut 340ms ease both;
+    }
+
+    .shift-up {
+      animation: shiftUp 420ms ease both;
+    }
+
+    .pulse {
+      animation: pulseGlow 700ms ease;
+    }
+    
+    .confetti {
+      position: absolute;
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* SVG Cake Specific Styles */
+    #cake-container {
+      position: relative;
+      width: 260px;
+      margin: auto;
+      touch-action: none;
+    }
+
+    #cake-svg {
+      width: 100%;
+    }
+
+    #knife {
+      position: absolute;
+      width: 80px;
+      height: 4px;
+      background: #fff;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      border-radius: 2px;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .cake-slice {
+      transition: transform 600ms ease;
+    }
+
+    @keyframes sectionIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.985); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes sectionOut {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to   { opacity: 0; transform: translateY(8px) scale(0.99); }
+    }
+
+    @keyframes lineIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes floatCake {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    @keyframes cakeBounce {
+      0% { transform: scale(1); }
+      45% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(1); box-shadow: var(--shadow); }
+      50% { transform: scale(1.01); box-shadow: 0 0 24px rgba(245,169,194,0.24), var(--shadow); }
+      100% { transform: scale(1); box-shadow: var(--shadow); }
+    }
+
+    @keyframes zoomIn {
+      from { opacity: 0; transform: scale(0.94); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    @keyframes shiftUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes sealPop {
+      0% { transform: scale(0.65) rotate(-8deg); opacity: 0; }
+      70% { transform: scale(1.04) rotate(3deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0); opacity: 1; }
+    }
+
+    @media (max-width: 420px) {
+      #app {
+        padding-inline: 10px;
+        padding-top: 58px;
+      }
+
+      .card {
+        padding: 18px 14px;
+        border-radius: 24px;
+      }
+
+      button,
+      input[type="text"] {
+        border-radius: 16px;
+      }
+
+      .interactive {
+        min-height: 128px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      :root {
+        --maxw: 560px;
+      }
+
+      .card {
+        padding: 26px 24px;
+      }
+
+      .title {
+        font-size: 1.8rem;
+      }
+
+      .card-container {
+        gap: 16px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+
+<body>
+
+  <div id="background-effects"></div>
+
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+
+  <audio id="birthday-audio" preload="auto">
+    <source src="happy-birthday.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="slice-sound" preload="auto">
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8630c4c2b.mp3?filename=knife-slice-2-6907.mp3" type="audio/mpeg">
+  </audio>
+
+  <div id="app">
+
+    <section id="unlock" class="section active">
+      <div class="card">
+
+        <p class="title">
+          Yeh surprise sirf ek special insaan ke liye hai 💛
+        </p>
+
+        <input 
+          type="text" 
+          id="name-input" 
+          placeholder="Enter your name"
+        />
+
+        <p id="error-text" class="error"></p>
+
+        <button id="unlock-btn">
+          Unlock 🎁
+        </button>
+
+        <p id="success-text" class="success"></p>
+
+      </div>
+    </section>
+
+    <section id="welcome" class="section">
+      <div class="card">
+
+        <p class="line">Hi Pari</p>
+        <p class="line">Aaj ka din thoda extra special hai ✨</p>
+        <p class="line">Isiliye maine kuchh chhota saa banaya...</p>
+
+        <button id="welcome-continue">
+          Continue →
+        </button>
+
+      </div>
+    </section>
+
+    <section id="interaction" class="section">
+      <div class="card-container">
+
+        <div class="card interactive" id="card-smile">
+          <p>Tap for a smile 😊</p>
+          <div class="hidden-content"></div>
+        </div>
+
+        <div class="card interactive" id="card-nice">
+          <p>Tap for something nice 🌼</p>
+          <div class="hidden-content"></div>
+        </div>
+
+        <div class="card interactive" id="card-goodday">
+          <p>Tap if you're having a good day 🌷</p>
+          <div class="hidden-content"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="birthday" class="section">
+
+      <div id="wish-step" class="sub-step">
+        <div class="card">
+
+          <p>Make a wish 💭</p>
+
+          <input 
+            type="text" 
+            id="wish-input" 
+            placeholder="Type your wish..."
+          />
+
+          <button id="wish-submit">
+            Send Wish 🙏
+          </button>
+
+          <p id="wish-status"></p>
+
+        </div>
+      </div>
+
+      <div id="cake-step" class="sub-step hidden">
+        <div class="card">
+
+          <div id="cake">
+            </div>
+
+          <button id="blow-candles">
+            Blow candles 🎂
+          </button>
+
+          <p id="cake-message"></p>
+
+        </div>
+      </div>
+
+      <div id="cut-step" class="sub-step hidden">
+        <div class="card">
+
+          <div id="cut-cake-area">
+            <div id="cake-container">
+              <svg id="cake-svg" viewBox="0 0 300 300">
+                <g id="cake-left">
+                  <path d="M50 150 Q150 80 150 150 L150 230 Q100 250 50 230 Z" fill="#ff9ecb"/>
+                </g>
+                <g id="cake-right">
+                  <path d="M150 150 Q250 80 250 150 L250 230 Q200 250 150 230 Z" fill="#ff7eb3"/>
+                </g>
+                <ellipse cx="150" cy="150" rx="100" ry="30" fill="#fff0f5"/>
+              </svg>
+              <div id="knife"></div>
+            </div>
+          </div>
+
+          <p id="cut-hint"></p>
+
+        </div>
+      </div>
+
+    </section>
+
+    <section id="letter" class="section">
+
+      <div class="card">
+
+        <button id="open-letter">
+          Open your birthday letter 💌
+        </button>
+
+        <div id="letter-content" class="hidden">
+          </div>
+
+        <button id="skip-letter" class="hidden">
+          Skip animation →
+        </button>
+
+        <div id="final-ending" class="hidden">
+          <p>Made with love 💛</p>
+          <button id="restart-btn">Read again 💌</button>
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+  <script>
+    // 🔥 FIREBASE INIT
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // 🌿 BASIC STATE
+    const sections = ["unlock", "welcome", "interaction", "birthday", "letter"];
+    let currentSection = 0;
+
+    // 🎯 ELEMENTS
+    const sectionEls = sections.map(id => document.getElementById(id));
+    const progressBar = document.getElementById("progress-bar");
+
+    // Unlock elements
+    const nameInput = document.getElementById("name-input");
+    const unlockBtn = document.getElementById("unlock-btn");
+    const errorText = document.getElementById("error-text");
+    const successText = document.getElementById("success-text");
+
+    // Welcome
+    const welcomeBtn = document.getElementById("welcome-continue");
+
+    // 🎚️ UTIL: Update Progress
+    function updateProgress() {
+      const percent = ((currentSection + 1) / sections.length) * 100;
+      progressBar.style.width = percent + "%";
+    }
+
+    // 🎬 SWITCH SECTION (CINEMATIC)
+    function goToSection(index) {
+      if (index < 0 || index >= sections.length) return;
+
+      const currentEl = sectionEls[currentSection];
+      const nextEl = sectionEls[index];
+
+      currentEl.classList.remove("active");
+
+      setTimeout(() => {
+        nextEl.classList.add("active");
+        currentSection = index;
+        updateProgress();
+
+        // Save progress
+        localStorage.setItem("birthday-progress", currentSection);
+      }, 400); // 300–600ms delay
+    }
+
+    // 🔐 NAME VALIDATION
+    function validateName(name) {
+      const validNames = ["chuu", "chuuu"];
+      return validNames.includes(name.trim().toLowerCase());
+    }
+
+    // ✨ UNLOCK HANDLER
+    unlockBtn.addEventListener("click", () => {
+      const value = nameInput.value;
+
+      if (!validateName(value)) {
+        errorText.textContent = "hint - your very first nickname given by me";
+        successText.textContent = "";
+        return;
+      }
+
+      // Success
+      errorText.textContent = "";
+      successText.textContent = "I knew it was you 😊";
+
+      const card = unlockBtn.closest(".card");
+      card.classList.add("glow", "zoom-in");
+
+      // Save visit
+      localStorage.setItem("visited", "true");
+
+      setTimeout(() => {
+        goToSection(1);
+      }, 800);
+    });
+
+    // ⌨️ ENTER KEY SUPPORT
+    nameInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") unlockBtn.click();
+    });
+
+    // 🌸 WELCOME → NEXT
+    welcomeBtn.addEventListener("click", () => {
+      goToSection(2);
+    });
+
+    // ✍️ WELCOME TEXT ANIMATION
+    function animateWelcomeText() {
+      const lines = document.querySelectorAll("#welcome .line");
+
+      lines.forEach((line, i) => {
+        setTimeout(() => {
+          line.classList.add("reveal");
+        }, i * 800); // 0.8s delay per line
+      });
+    }
+
+    // 🧠 LOAD STATE (REVISIT)
+    window.addEventListener("load", () => {
+      const visited = localStorage.getItem("visited");
+      const savedProgress = localStorage.getItem("birthday-progress");
+
+      if (visited && savedProgress !== null) {
+        const restart = confirm("Do you want to relive this again? 💛");
+
+        if (!restart) {
+          currentSection = parseInt(savedProgress);
+          sectionEls.forEach(el => el.classList.remove("active"));
+          sectionEls[currentSection].classList.add("active");
+          updateProgress();
+
+          if (currentSection === 1) animateWelcomeText();
+          return;
+        } else {
+          localStorage.clear();
+        }
+      }
+
+      updateProgress();
+      animateWelcomeText();
+    });
+
+    // 💫 GLOBAL TAP FEEDBACK
+    document.querySelectorAll("button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        btn.classList.add("pulse");
+        setTimeout(() => btn.classList.remove("pulse"), 600);
+      });
+    });
+
+    // 🌌 BACKGROUND PARTICLES SYSTEM
+    const bgContainer = document.getElementById("background-effects");
+    let bgParticles = [];
+    let maxParticles = 24;
+
+    // 📉 REDUCE ON LOW-END DEVICES
+    if (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) {
+      maxParticles = 14;
+    }
+
+    // 💖 CREATE PARTICLE
+    function createBgParticle() {
+      const el = document.createElement("div");
+      el.className = "heart";
+      el.textContent = Math.random() > 0.5 ? "💖" : "✨";
+      const size = Math.random() * 0.6 + 0.8;
+      
+      el.style.position = "absolute";
+      el.style.left = Math.random() * 100 + "%";
+      el.style.top = "100%";
+      el.style.fontSize = size + "rem";
+      el.style.opacity = Math.random() * 0.6 + 0.4;
+
+      bgContainer.appendChild(el);
+
+      return {
+        el,
+        x: parseFloat(el.style.left),
+        y: 100,
+        speed: Math.random() * 0.3 + 0.2,
+        drift: (Math.random() - 0.5) * 0.2
+      };
+    }
+
+    // 🎬 INIT PARTICLES
+    function initParticles() {
+      for (let i = 0; i < maxParticles; i++) {
+        bgParticles.push(createBgParticle());
+      }
+    }
+
+    // 🔄 ANIMATION LOOP (GPU SAFE)
+    function animateParticles() {
+      bgParticles.forEach(p => {
+        p.y -= p.speed;
+        p.x += p.drift;
+
+        if (p.y < -10) {
+          p.y = 110;
+          p.x = Math.random() * 100;
+        }
+
+        p.el.style.transform = `translate(${p.x}vw, ${p.y}vh)`;
+      });
+
+      requestAnimationFrame(animateParticles);
+    }
+
+    // 🌊 PARALLAX (SUBTLE)
+    let px = 0, py = 0;
+
+    window.addEventListener("touchmove", (e) => {
+      const touch = e.touches[0];
+      px = (touch.clientX / window.innerWidth - 0.5) * 6;
+      py = (touch.clientY / window.innerHeight - 0.5) * 6;
+      bgContainer.style.transform = `translate(${px}px, ${py}px)`;
+    }, { passive: true });
+
+    // 🖱️ DESKTOP PARALLAX
+    window.addEventListener("mousemove", (e) => {
+      px = (e.clientX / window.innerWidth - 0.5) * 6;
+      py = (e.clientY / window.innerHeight - 0.5) * 6;
+      bgContainer.style.transform = `translate(${px}px, ${py}px)`;
+    });
+
+    // 💖 SECRET DOUBLE TAP
+    let lastTap = 0;
+    document.addEventListener("touchend", (e) => {
+      const now = new Date().getTime();
+      if (now - lastTap < 300) {
+        createHeartBurst(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+      }
+      lastTap = now;
+    });
+
+    // 💥 HEART BURST
+    function createHeartBurst(x, y) {
+      for (let i = 0; i < 10; i++) {
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.textContent = "💖";
+
+        h.style.position = "fixed";
+        h.style.left = x + "px";
+        h.style.top = y + "px";
+        h.style.fontSize = "1.2rem";
+
+        document.body.appendChild(h);
+
+        const angle = Math.random() * Math.PI * 2;
+        const dist = Math.random() * 80 + 40;
+
+        const dx = Math.cos(angle) * dist;
+        const dy = Math.sin(angle) * dist;
+
+        requestAnimationFrame(() => {
+          h.style.transition = "transform 700ms ease, opacity 700ms ease";
+          h.style.transform = `translate(${dx}px, ${dy}px) scale(1.2)`;
+          h.style.opacity = "0";
+        });
+
+        setTimeout(() => h.remove(), 700);
+      }
+    }
+
+    initParticles();
+    animateParticles();
+
+    // 🎯 INTERACTION CARDS
+    const cardSmile = document.getElementById("card-smile");
+    const cardNice = document.getElementById("card-nice");
+    const cardGoodDay = document.getElementById("card-goodday");
+
+    // ✨ UTILITY: SPARKLE BURST
+    function createSparkles(container) {
+      for (let i = 0; i < 6; i++) {
+        const s = document.createElement("div");
+        s.className = "sparkle";
+
+        const x = (Math.random() - 0.5) * 120;
+        const y = (Math.random() - 0.5) * 80;
+
+        s.style.left = "50%";
+        s.style.top = "50%";
+        s.style.transform = `translate(${x}px, ${y}px) scale(0.6)`;
+        s.style.opacity = "1";
+
+        container.appendChild(s);
+
+        requestAnimationFrame(() => {
+          s.style.transition = "transform 600ms ease, opacity 600ms ease";
+          s.style.transform = `translate(${x * 1.8}px, ${y * 1.8}px) scale(1.2)`;
+          s.style.opacity = "0";
+        });
+
+        setTimeout(() => s.remove(), 650);
+      }
+    }
+
+    // 💫 TAP EFFECT
+    function tapEffect(card) {
+      card.style.transform = "scale(0.95)";
+      setTimeout(() => card.style.transform = "scale(1)", 120);
+      createSparkles(card);
+    }
+
+    // 😊 CARD 1: SMILE SCENE
+    cardSmile.addEventListener("click", () => {
+      if (cardSmile.classList.contains("revealed")) return;
+
+      tapEffect(cardSmile);
+      const content = cardSmile.querySelector(".hidden-content");
+      content.textContent =
+        "Socho… shaam ka time hai 🌇 halka sa pink sky, thandi hawa chal rahi hai… tum ek cozy si jagah par baithi ho, haath mein garam chai ☕… koi tension nahi, koi jaldi nahi… bas ek sukoon sa feel ho raha hai. Aur bina reason ke tumhare face par ek chhoti si smile aa jaati hai… 😊";
+      cardSmile.classList.add("revealed");
+      checkCardsRevealed();
+    });
+
+    // 🌼 CARD 2: SOMETHING NICE
+    cardNice.addEventListener("click", () => {
+      if (cardNice.classList.contains("revealed")) return;
+
+      tapEffect(cardNice);
+      const content = cardNice.querySelector(".hidden-content");
+      content.textContent = "You deserve good things always";
+      cardNice.classList.add("revealed");
+      checkCardsRevealed();
+    });
+
+    // 🌷 CARD 3: GOOD DAY
+    cardGoodDay.addEventListener("click", () => {
+      if (cardGoodDay.classList.contains("revealed")) return;
+
+      tapEffect(cardGoodDay);
+      const content = cardGoodDay.querySelector(".hidden-content");
+      content.textContent = "Stay exactly the way you are";
+      cardGoodDay.classList.add("revealed");
+      checkCardsRevealed();
+    });
+
+    // Auto-advance after interactions
+    function checkCardsRevealed() {
+      if (
+        cardSmile.classList.contains("revealed") &&
+        cardNice.classList.contains("revealed") &&
+        cardGoodDay.classList.contains("revealed")
+      ) {
+        setTimeout(() => { goToSection(3); }, 2500);
+      }
+    }
+
+    // 🎂 WISH SYSTEM
+    const wishInput = document.getElementById("wish-input");
+    const wishBtn = document.getElementById("wish-submit");
+    const wishStatus = document.getElementById("wish-status");
+
+    const wishStep = document.getElementById("wish-step");
+    const cakeStepEl = document.getElementById("cake-step");
+
+    // ✨ FLOATING WISH ANIMATION (Updated to 💭)
+    function createWishParticle(text) {
+      const el = document.createElement("div");
+      el.textContent = "💭";
+      el.style.position = "fixed";
+      el.style.left = "50%";
+      el.style.bottom = "120px";
+      el.style.fontSize = "1.8rem";
+      el.style.transform = "translateX(-50%) scale(0.8)";
+      el.style.opacity = "1";
+      el.style.zIndex = "100";
+
+      document.body.appendChild(el);
+
+      requestAnimationFrame(() => {
+        el.style.transition = "transform 1.8s ease, opacity 1.8s ease";
+        el.style.transform = "translate(-50%, -220px) scale(1.2)";
+        el.style.opacity = "0";
+      });
+
+      setTimeout(() => el.remove(), 2000);
+    }
+
+    // 📤 SAVE TO FIREBASE
+    async function saveWish(text) {
+      try {
+        await db.collection("wishes").add({
+          text: text,
+          timestamp: new Date()
+        });
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    // 🎯 SUBMIT WISH
+    wishBtn.addEventListener("click", () => {
+      const wish = wishInput.value.trim();
+
+      if (!wish) {
+        wishStatus.textContent = "please write something 💭";
+        return;
+      }
+
+      wishStatus.textContent = "wish sent to shiv ji 🙏";
+      createWishParticle(wish);
+
+      setTimeout(() => {
+        wishStep.classList.add("hidden");
+        cakeStepEl.classList.remove("hidden");
+      }, 1200);
+
+      saveWish(wish).catch(() => {});
+    });
+
+    // ⌨️ ENTER SUPPORT
+    wishInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") wishBtn.click();
+    });
+
+    // 🎂 ELEMENTS (BLOW & CUT)
+    const blowBtn = document.getElementById("blow-candles");
+    const basicCake = document.getElementById("cake");
+    const cakeMsg = document.getElementById("cake-message");
+    const cutStep = document.getElementById("cut-step");
+    const cutArea = document.getElementById("cut-cake-area");
+    const cutHint = document.getElementById("cut-hint");
+    const audio = document.getElementById("birthday-audio");
+
+    // 🎊 NEW CONFETTI FUNCTION WITH .animate() 
+    function createConfetti(x, y) {
+      for (let i = 0; i < 25; i++) {
+        let conf = document.createElement("div");
+        conf.className = "confetti";
+        conf.textContent = "🎊";
+        conf.style.left = x + "px";
+        conf.style.top = y + "px";
+        conf.style.fontSize = (Math.random() * 12 + 14) + "px";
+        conf.style.transform = `rotate(${Math.random() * 360}deg)`;
+        
+        document.body.appendChild(conf);
+        
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = Math.random() * 100 + 50;
+        const duration = 2000 + Math.random() * 1000;
+        
+        conf.animate([
+          { transform: `translate(0px, 0px) rotate(0deg)`, opacity: 1 },
+          { transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) rotate(360deg)`, opacity: 0 }
+        ], {
+          duration: duration,
+          easing: "ease-out",
+          fill: "forwards"
+        });
+        
+        setTimeout(() => conf.remove(), duration);
+      }
+    }
+
+    // ✨ IDLE HINT
+    let hintTimer;
+    let hasCut = false;
+    function startCutHintTimer() {
+      hintTimer = setTimeout(() => {
+        if (!hasCut) {
+          cutHint.textContent = "swipe the cake to cut it ✨";
+        }
+      }, 5000);
+    }
+
+    // 🎂 BLOW CANDLES
+    blowBtn.addEventListener("click", () => {
+      basicCake.classList.add("candles-out", "bounce");
+      
+      const rect = basicCake.getBoundingClientRect();
+      createConfetti(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      
+      cakeMsg.textContent = "I hope jo bhi tumne maanga ho wo sach ho jaaye 💛";
+
+      setTimeout(() => {
+        cakeStepEl.classList.add("hidden");
+        cutStep.classList.remove("hidden");
+        startCutHintTimer();
+      }, 1200);
+    });
+
+    // 🎵 MUSIC SYSTEM
+    function playBirthdayMusic() {
+      if (!audio) return;
+
+      audio.volume = 0;
+      audio.currentTime = 0;
+
+      const playPromise = audio.play();
+
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          let vol = 0;
+          const fadeIn = setInterval(() => {
+            vol += 0.05;
+            if (vol >= 0.6) {
+              vol = 0.6;
+              clearInterval(fadeIn);
+            }
+            audio.volume = vol;
+          }, 120);
+
+          showMusicUI();
+
+          setTimeout(() => {
+            fadeOutMusic();
+          }, 20000);
+
+        }).catch(() => {});
+      }
+    }
+
+    function fadeOutMusic() {
+      let vol = audio.volume;
+
+      const fade = setInterval(() => {
+        vol -= 0.05;
+        if (vol <= 0) {
+          vol = 0;
+          clearInterval(fade);
+          audio.pause();
+        }
+        audio.volume = vol;
+      }, 120);
+    }
+
+    function showMusicUI() {
+      const text = document.createElement("div");
+      text.className = "music-text";
+      text.textContent = "playing your birthday song…";
+
+      cutArea.appendChild(text);
+
+      for (let i = 0; i < 6; i++) {
+        const note = document.createElement("div");
+        note.className = "note";
+        note.textContent = "🎶";
+
+        note.style.left = Math.random() * 100 + "%";
+        note.style.top = "60%";
+
+        cutArea.appendChild(note);
+
+        requestAnimationFrame(() => {
+          note.style.transition = "transform 2s linear, opacity 2s";
+          note.style.transform = "translateY(-120px)";
+          note.style.opacity = "0";
+        });
+
+        setTimeout(() => note.remove(), 2000);
+      }
+    }
+
+    // 🔪 SVG CAKE CUTTING LOGIC
+    const cakeContainerSVG = document.getElementById("cake-container");
+    const knife = document.getElementById("knife");
+    const leftSlice = document.getElementById("cake-left");
+    const rightSlice = document.getElementById("cake-right");
+    const sliceSound = document.getElementById("slice-sound");
+
+    let isCuttingSVG = false;
+    let startCutX = 0;
+    let startCutY = 0;
+
+    cakeContainerSVG.addEventListener("touchstart", (e) => {
+      if (hasCut) return;
+      const t = e.touches[0];
+      isCuttingSVG = true;
+      startCutX = t.clientX;
+      startCutY = t.clientY;
+      cutHint.textContent = "";
+      clearTimeout(hintTimer);
+    });
+
+    cakeContainerSVG.addEventListener("touchmove", (e) => {
+      if (!isCuttingSVG) return;
+
+      const t = e.touches[0];
+      const rect = cakeContainerSVG.getBoundingClientRect();
+
+      const x = t.clientX - rect.left;
+      const y = t.clientY - rect.top;
+
+      knife.style.left = x + "px";
+      knife.style.top = y + "px";
+
+      const dx = t.clientX - startCutX;
+      const dy = t.clientY - startCutY;
+
+      const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+
+      knife.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+    });
+
+    cakeContainerSVG.addEventListener("touchend", (e) => {
+      if (!isCuttingSVG) return;
+      isCuttingSVG = false;
+
+      const t = e.changedTouches[0];
+
+      const dx = t.clientX - startCutX;
+      const dy = t.clientY - startCutY;
+
+      const distance = Math.hypot(dx, dy);
+
+      if (distance > 60) {
+        performCakeCutSVG(dx, dy);
+      }
+    });
+
+    function performCakeCutSVG(dx, dy) {
+      if (hasCut) return;
+      hasCut = true;
+
+      const length = Math.hypot(dx, dy);
+      const nx = dx / length;
+      const ny = dy / length;
+
+      const forceX = -ny * 25;
+      const forceY = nx * 15;
+
+      leftSlice.classList.add("cake-slice");
+      rightSlice.classList.add("cake-slice");
+
+      leftSlice.style.transform = `translate(${forceX}px, ${forceY}px) rotate(-6deg)`;
+      rightSlice.style.transform = `translate(${-forceX}px, ${-forceY}px) rotate(6deg)`;
+
+      try {
+        sliceSound.currentTime = 0;
+        sliceSound.play();
+      } catch (e) {}
+
+      if (navigator.vibrate) navigator.vibrate(30);
+
+      const rect = cakeContainerSVG.getBoundingClientRect();
+      createConfetti(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      playBirthdayMusic();
+
+      setTimeout(() => {
+        goToSection(4);
+      }, 2000);
+    }
+
+    // 💌 ELEMENTS (LETTER)
+    const openLetterBtn = document.getElementById("open-letter");
+    const letterContent = document.getElementById("letter-content");
+    const skipBtn = document.getElementById("skip-letter");
+    const finalEnding = document.getElementById("final-ending");
+
+    // 📝 EXACT LETTER CONTENT
+    const letterLines = [
+    "Happy… Happy… Happy Birthday Pari 🎉🎊🎈🎂💐",
+    "I wish ki tum hamesha khush raho… Kabhi bhi kisi bhi tareeke ki koi problem, samasya, issue, pareshaani naa ho… aur agar by chance hogi bhi, toh kya hua… tussi toh tingu don ho hi 😏 mujhe pura bharosa hai, usse bhi lad logi…",
+    "I know, you are a strong and brave girl. 💛",
+    "I wish tum hamesha muskurati raho, hasti raho… kyuki haste rehna chahiye… it’s good for your health 😄",
+    "Tumhare chehre par udaasi bilkul suit nahi karti… aur overthinking toh… 🤯",
+    "I know… jab tum overthinking karti hogi na, toh ekdum chandramukhi lagti hogi 😂 isiliye main toh chahta hoon tum hamesha bas hasti raho aur muskurati raho… tumhari saari overthinking aur problems life se chhu mantar ho jaaye ✨",
+    "I wish ki tumhe woh sab mile jo tum deserve karti ho 🤞🏻 I wish ki tum apne saare dreams poore kar lo… mujhe pata hai tum kar logi… I believe in you 💛",
+    "I wish ki tumhara ye din aur aane wale sabhi din utne hi khubsurat ho jitni tumhari smile hai 👀💖",
+    "Idk kaise explain karu… par tum mere liye mammi ke baad sabse precious aur special ho 💖 ek tareeke se meri dusri Amma bhi ho 🙄",
+    "Mujhko dara dhamka ke rakhti ho… aisa koi karta hai bhala? 🙄",
+    "Aur pata nahi kyun, jab mammi mujhe marti hai toh tumhe bada maza aata hai… 😂",
+    "Sach batau toh… mera toh kabhi mann nahi bharta tumse baat karke 💛",
+    "I just love your all bak-bak and blaa blaa blaa...",
+    "Lekin sabse jyada maza toh tab aata hai jab tum daant-ti ho mujhe tingu don banke...😂",
+    "Thoda kam daanta chillaya karo mere uppar apne se bado ki izzat karni chahiye tumhe....😁",
+    "Aur pta hai kya tum sabse jyada pyaari kab lagti ho, jab mai tumhe apni bakchodi se pareshan karta hoon aur tum muh banati hogi woh gusse wala tab 😂",
+    "Maine dekha nhi hai par mujhe pura bharosa hai 😂",
+    "Aur… kehna toh bohot kuch hai par kuch baatein dil mein rehkar bhi khoobsurat lagti hain 💌",
+    "Shayad bohot baate ho gayi aur lagta hai thodi bohot shayari bhi ho gayi😅, kuchh agle birthday ke liye bhi bacha ke rakhte hai.....😂",
+    "Waise lagta toh nhi kuchh bacha hai ab agle birthday ke liye.....😂 Shayad agli baar se ek hi line kaa happy birthday wish karna padega😂😂",
+    "Ruko ruko kuchh aur yaad aa raha hai...",
+    "Ek second kahi tumhare baaki saare naam bura naa Maan jaaye......🤔 Unhe bhi wish kar dena chahiye...",
+    "Happy Birthday Chahat 🥳🎉💐",
+    "Happy Birthday Pari ✨💐🎂",
+    "Happy Birthday Lado 💐✨🎉",
+    "Happy Birthday Laxmi 💐🎈🎉",
+    "Happy Birthday Baigan 🎂✨🎈",
+    "Happy Birthday Chuu 🥳🎉✨",
+    "Happy Birthday Shizuka 💐🎂🎉",
+    "Happy Birthday Mon ceuor ✨🎉💐",
+    "Happy Birthday Mi amor 🥳🎈🎉",
+    "Happy Birthday Eiene liebe ✨🎈🎉",
+    "Happy Birthday Un amor 🥳🎉🎂💐",
+    "Happy Birthday One love 💐🎂🎈",
+    "Happy Birthday Angel ✨🎈🎉",
+    "Happy Birthday Chudail 🧙🏻 🎉💐🎈",
+    "Happy Birthday Chandramukhi 🎂✨",
+    "Happy Birthday Theodore 💐🎉✨",
+    "Happy Birthday Hm..👍🏻  🥳💐🎉🎂",
+    "Happy Birthday Encyclopedia ✨🎉",
+    "Happy Birthday Neend-paglu 🥳🎂",
+    "Happy Birthday Dukhi aatma ✨🎉",
+    "Happy Birthday Tingu don 💐🎉🥳",
+    "Happy birthday ho gaya ho gaya 😂😂😂",
+    "Ab baaki agle saal jab aur naye naamkaran ho jayenge tab 😂",
+    "Ab... Aaj tumhara special day hai... So enjoy your day....😊😌",
+    "And never forgot that I am always here for you....💗",
+    "Aur ye saari wishes sirf isiliye nhi kyuki aaj tumhara birthday ye permanent wishes hai wo bhi poore dil se......😊",
+    "Kabhi bhi low feel ho overthink karo unloved saa feel ho toh bas iss sabko ek baar firse padh lena meri 100% guarantee ki man halka ho jayega...... Aur better feel hoga...😌",
+    "And one last time... Happy Birthday Pari....👀✨💌"
+    ];
+
+    // 🎬 OPEN LETTER
+    openLetterBtn.addEventListener("click", () => {
+      openLetterBtn.classList.add("fade-out");
+
+      setTimeout(() => {
+        openLetterBtn.style.display = "none";
+        letterContent.classList.remove("hidden");
+        skipBtn.classList.remove("hidden");
+
+        startLetterAnimation();
+      }, 1000);
+    });
+
+    // ✨ ANIMATION
+    let skip = false;
+
+    function startLetterAnimation() {
+      letterContent.innerHTML = "";
+      let delay = 0;
+
+      letterLines.forEach((line, index) => {
+        const p = document.createElement("p");
+        p.className = "letter-line";
+        p.textContent = line;
+
+        letterContent.appendChild(p);
+
+        let lineDelay = 600;
+
+        if (line.length > 120) lineDelay = 1200;
+        if (index > letterLines.length - 5) lineDelay = 1400;
+
+        setTimeout(() => {
+          if (!skip) p.classList.add("show");
+        }, delay);
+
+        delay += lineDelay;
+      });
+
+      setTimeout(() => {
+        if (!skip) showFinalEnding();
+      }, delay + 500);
+    }
+
+    // ⏭️ SKIP BUTTON
+    skipBtn.addEventListener("click", () => {
+      skip = true;
+      letterContent.innerHTML = "";
+
+      letterLines.forEach(line => {
+        const p = document.createElement("p");
+        p.className = "letter-line show";
+        p.textContent = line;
+        letterContent.appendChild(p);
+      });
+
+      showFinalEnding();
+    });
+
+    // 🎁 FINAL ENDING
+    function showFinalEnding() {
+      skipBtn.classList.add("hidden");
+      finalEnding.classList.remove("hidden");
+
+      const seal = document.createElement("div");
+      seal.id = "wax-seal";
+      finalEnding.appendChild(seal);
+    }
+
+    // 🔁 RESTART
+    document.getElementById("restart-btn").addEventListener("click", () => {
+      localStorage.clear();
+      location.reload();
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+  
+
+    
